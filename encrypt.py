@@ -10,19 +10,19 @@ from robustness.model_utils import make_and_restore_model
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--orig_data', default='./data/cifar10', help='path to the original dataset')
-    parser.add_argument('--enc_data', default='./data', help='path to output encrypted dataset')
-    parser.add_argument('--resume_path', default='./logs/checkpoints/dir/resnet50/checkpoint.pt.best', help='path to checkpoint to resume from')
+    parser.add_argument('--orig-data', default='./data/cifar10', help='path to the original dataset')
+    parser.add_argument('--enc-data', default='./data', help='path to output encrypted dataset')
+    parser.add_argument('--resume-path', default='./logs/checkpoints/dir/resnet50/checkpoint.pt.best', help='path to checkpoint to resume from')
     parser.add_argument('--workers', type=int, help='data loading workers', default=8)
-    parser.add_argument('--batch_size', type=int, default=128, help='batch size for data loading')
+    parser.add_argument('--batch-size', type=int, default=128, help='batch size for data loading')
     parser.add_argument('--arch', default='resnet50', help='architecture')
     parser.add_argument('--eps', type=float, default=0.5, help='adversarial perturbation budget')
-    parser.add_argument('--attack_lr', type=float, default=0.1, help='step size for PGD')
-    parser.add_argument('--attack_steps', type=int, default=100, help='number of steps for adversarial attack')
-    parser.add_argument('--enc_method', default='basic', choices=['basic', 'mixup', 'horiz', 'mixandcat'], help='encryption method')
+    parser.add_argument('--attack-lr', type=float, default=0.1, help='step size for PGD')
+    parser.add_argument('--attack-steps', type=int, default=100, help='number of steps for adversarial attack')
+    parser.add_argument('--enc-method', default='basic', choices=['basic', 'mixup', 'horiz', 'mixandcat'], help='encryption method')
     parser.add_argument('--alpha', type=float, default=0.5, help='hyperparameter in horizontal concat')
     parser.add_argument('--lambd', type=float, default=0.5, help='hyperparameter in mixup')
-    parser.add_argument('--manual_seed', type=int, default=23, help='manual seed')
+    parser.add_argument('--manual-seed', type=int, default=23, help='manual seed')
 
     opt = parser.parse_args()
 

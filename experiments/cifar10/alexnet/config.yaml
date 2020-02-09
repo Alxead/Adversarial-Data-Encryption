@@ -2,7 +2,7 @@
 architecture: alexnet
 
 # log and checkpoint
-data_path: /home/huyingdong/CIFAR-ZOO/data
+data_path: ./data
 ckpt_path: ./
 ckpt_name: alexnet
 

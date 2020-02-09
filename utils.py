@@ -10,9 +10,6 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import Dataset
-from robustness.tools.vis_tools import show_image_row
-from robustness.tools.label_maps import CLASS_DICT
-from mydataset import MYCIFAR10
 
 class Cutout(object):
     def __init__(self, n_holes, length):
@@ -151,147 +148,37 @@ class CustomTensorDataset(Dataset):
 
 def get_data_loader(transform_train, transform_test, config):
 
-    trainset = torchvision.datasets.CIFAR10(
-        root=config.data_path, train=True,
+    orig_train_set = torchvision.datasets.CIFAR10(
+        root=config.orig_data, train=True,
         download=True, transform=transform_train)
 
-    testset = torchvision.datasets.CIFAR10(
-        root=config.data_path, train=False,
+    orig_test_set = torchvision.datasets.CIFAR10(
+        root=config.orig_data, train=False,
         download=True, transform=transform_test)
 
-    # testset = MYCIFAR10(root=config.data_path, train=False, download=False, transform=transform_test)
-
-    # encrypt_train_data1 = torch.cat(torch.load(os.path.join(config.data_path, "mydataset", "train_image1")))
-    # encrypt_train_labels1 = torch.cat(torch.load(os.path.join(config.data_path, "mydataset", "train_label1")))
-    # encrypt_train_data2 = torch.cat(torch.load(os.path.join(config.data_path, "mydataset", "train_image2")))
-    # encrypt_train_labels2 = torch.cat(torch.load(os.path.join(config.data_path, "mydataset", "train_label2")))
-    # encrypt_train_data = torch.cat((encrypt_train_data1, encrypt_train_data2))
-    # encrypt_train_labels = torch.cat((encrypt_train_labels1, encrypt_train_labels2))
-    # encrypt_train_set = CustomTensorDataset(tensors=(encrypt_train_data, encrypt_train_labels),
-    #                                         transform=transforms.Compose([transforms.RandomCrop(32, padding=4),
-    #                                                                       transforms.RandomHorizontalFlip(),
-    #                                                                       transforms.ToTensor()]))
-
-    encrypt_train_data = torch.cat(torch.load(os.path.join(config.data_path, "advdataset", "train_image_mixandcat")))
-    encrypt_train_labels = torch.cat(torch.load(os.path.join(config.data_path, "advdataset", "train_label_mixandcat")))
+    encrypt_train_data = torch.cat(torch.load(config.enc_img))
+    encrypt_train_labels = torch.cat(torch.load(config.enc_label))
     encrypt_train_set = CustomTensorDataset(tensors=(encrypt_train_data, encrypt_train_labels),
-                                            transform=transforms.Compose([transforms.RandomCrop(32, padding=4),
-                                                                          transforms.RandomHorizontalFlip(),
-                                                                          transforms.ToTensor()])
-                                            )
-
-    idx1 = 401
-    idx2 = 12001
-    idx3 = 31001
-    idx4 = 40000
-    save_image('./image/orig_idx1.png', trainset[idx1][0])
-    save_image('./image/orig_idx2.png', trainset[idx2][0])
-    save_image('./image/orig_idx3.png', trainset[idx3][0])
-    save_image('./image/orig_idx4.png', trainset[idx4][0])
-    save_image('./image/enc_idx1.png', encrypt_train_set[idx1][0])
-    save_image('./image/enc_idx2.png', encrypt_train_set[idx2][0])
-    save_image('./image/enc_idx3.png', encrypt_train_set[idx3][0])
-    save_image('./image/enc_idx4.png', encrypt_train_set[idx4][0])
+                                            transform=transform_train)
 
 
-    tmp = encrypt_train_set[idx1][0]
-    tmp2 = encrypt_train_set[idx1][1]
-    tmp3 = encrypt_train_set[idx1]
-    print("idx1 label:%s" % (CLASS_DICT['CIFAR'][int(encrypt_train_set[idx1][1])]))
-    print("idx2 label:%s" % (CLASS_DICT['CIFAR'][int(encrypt_train_set[idx2][1])]))
-    print("idx3 label:%s" % (CLASS_DICT['CIFAR'][int(encrypt_train_set[idx3][1])]))
-    print("idx4 label:%s" % (CLASS_DICT['CIFAR'][int(encrypt_train_set[idx4][1])]))
-
-
-    index_orig = random.sample(range(0, 50000), 1000)
-    index_enc = list(set(range(0, 50000)) - set(index_orig))
-    selected_orig_data = list(map(lambda x: trainset[x][0], index_orig))
-    selected_orig_labels = list(map(lambda x: trainset[x][1], index_orig))
-    selected_enc_data = list(map(lambda x: encrypt_train_set[x][0], index_enc))
-    selected_enc_labels = list(map(lambda x: encrypt_train_set[x][1], index_enc))
-    mixed_set_data = selected_orig_data + selected_enc_data
-    mixed_set_labels = selected_orig_labels + selected_enc_labels
-    mixed_data = torch.cat(mixed_set_data).view(50000, 3, 32, 32)
-    mixed_labels = torch.tensor(mixed_set_labels)
-    mixed_train_set = CustomTensorDataset(tensors=(mixed_data, mixed_labels),
-                                          transform=transforms.Compose([transforms.ToTensor()]))
-
-
-    # encrypt_test_data = torch.cat(torch.load(os.path.join(config.data_path, "mydataset", "test_image")))
-    # encrypt_test_labels = torch.cat(torch.load(os.path.join(config.data_path, "mydataset", "test_label")))
-    # encrypt_test_set = CustomTensorDataset(tensors=(encrypt_test_data, encrypt_test_labels),
-    #                                        transform=transforms.Compose([transforms.ToTensor()]))
-
-    encrypt_test_data = torch.cat(torch.load(os.path.join(config.data_path, "advdataset", "test_image_mixandcat")))
-    encrypt_test_labels = torch.cat(torch.load(os.path.join(config.data_path, "advdataset", "test_label_mixandcat")))
+    encrypt_test_data = torch.cat(torch.load(os.path.join(config.data_path, "test_image")))
+    encrypt_test_labels = torch.cat(torch.load(os.path.join(config.data_path, "test_label")))
     encrypt_test_set = CustomTensorDataset(tensors=(encrypt_test_data, encrypt_test_labels),
-                                           transform=transforms.Compose([transforms.ToTensor()])
-                                           )
+                                           transform=transform_test)
 
-    index_encrypt_test_small = random.sample(range(0, 45000), 1000)
-    index_encrypt_train_small = list(set(range(0, 45000)) - set(index_encrypt_test_small))
-
-    # 40000
-    encrypt_train_data_small = encrypt_train_data[index_encrypt_train_small, ...]
-    encrypt_train_labels_small = encrypt_train_labels[index_encrypt_train_small, ...]
-    encrypt_train_set_small = CustomTensorDataset(tensors=(encrypt_train_data_small, encrypt_train_labels_small),
-                                                  transform=transforms.Compose(
-                                                      [transforms.RandomCrop(32, padding=4),
-                                                       transforms.RandomHorizontalFlip(),
-                                                       transforms.ToTensor()]))
-    # 10000
-    encrypt_test_data_small = encrypt_train_data[index_encrypt_test_small, ...]
-    encrypt_test_labels_small = encrypt_train_labels[index_encrypt_test_small, ...]
-    encrypt_test_set_small = CustomTensorDataset(tensors=(encrypt_test_data_small, encrypt_test_labels_small),
-                                                 transform=transforms.Compose([transforms.ToTensor()]))
-
-
-
-    ###########################
-    # madry ddeterminial_CIFAR
-    ###########################
-    ddet_train_data = torch.cat(torch.load(os.path.join(config.data_path, "madry_robust_CIFAR", "release_datasets", "drand_CIFAR", "CIFAR_ims")))
-    ddet_labels = torch.cat(torch.load(os.path.join(config.data_path, "madry_robust_CIFAR", "release_datasets", "drand_CIFAR", "CIFAR_lab")))
-    ddet_labels_minus1 = ddet_labels
-
-    # save_image('./image/ddet_idx1.png', ddet_train_data[idx1])
-    # save_image('./image/ddet_idx2.png', ddet_train_data[idx2])
-    # save_image('./image/ddet_idx3.png', ddet_train_data[idx3])
-    # print("idx1 label:%d" % (ddet_labels[idx1]))
-    # print("idx2 label:%d" % (ddet_labels[idx2]))
-    # print("idx3 label:%d" % (ddet_labels[idx3]))
-    # print("idx1 label-1:%d" % (ddet_labels_minus1[idx1]))
-    # print("idx2 label-1:%d" % (ddet_labels_minus1[idx2]))
-    # print("idx3 label-1:%d" % (ddet_labels_minus1[idx3]))
-
-    index_ddet_test_small = random.sample(range(0, 50000), 5000)
-    index_ddet_train_small = list(set(range(0, 50000)) - set(index_ddet_test_small))
-
-    # ddet train
-    ddet_train_data_small = ddet_train_data[index_ddet_train_small, ...]
-    ddet_train_labels_small = ddet_labels_minus1[index_ddet_train_small, ...]
-    ddet_train_set_small = CustomTensorDataset(tensors=(ddet_train_data_small, ddet_train_labels_small),
-                                               transform=transforms.Compose(
-                                                    [transforms.RandomCrop(32, padding=4),
-                                                     transforms.RandomHorizontalFlip(),
-                                                     transforms.ToTensor()]))
-    # ddet test
-    ddet_test_data_small = ddet_train_data[index_ddet_test_small, ...]
-    ddet_test_labels_small = ddet_labels_minus1[index_ddet_test_small, ...]
-    ddet_test_set_small = CustomTensorDataset(tensors=(ddet_test_data_small, ddet_test_labels_small),
-                                              transform=transforms.Compose([transforms.ToTensor()]))
 
     #### loader
 
     loaders = {
         'orig_train': torch.utils.data.DataLoader(
-            trainset,
+            orig_train_set,
             batch_size=config.batch_size,
             shuffle=True,
             num_workers=config.workers,
             pin_memory=True),
         'orig_test': torch.utils.data.DataLoader(
-            testset,
+            orig_test_set,
             batch_size=config.batch_size,
             shuffle=False,
             num_workers=config.workers,
@@ -308,36 +195,6 @@ def get_data_loader(transform_train, transform_test, config):
             shuffle=False,
             num_workers=config.workers,
             pin_memory=True),
-        'enc_train_small': torch.utils.data.DataLoader(
-            encrypt_train_set_small,
-            batch_size=config.batch_size,
-            shuffle=True,
-            num_workers=config.workers,
-            pin_memory=True),
-        'enc_test_small': torch.utils.data.DataLoader(
-            encrypt_test_set_small,
-            batch_size=config.batch_size,
-            shuffle=False,
-            num_workers=config.workers,
-            pin_memory=True),
-        'mixed_train': torch.utils.data.DataLoader(
-            mixed_train_set,
-            batch_size=config.batch_size,
-            shuffle=True,
-            num_workers=config.workers,
-            pin_memory=True),
-        'ddet_train': torch.utils.data.DataLoader(
-            ddet_train_set_small,
-            batch_size=config.batch_size,
-            shuffle=True,
-            num_workers=config.workers,
-            pin_memory=True),
-        'ddet_test': torch.utils.data.DataLoader(
-            ddet_test_set_small,
-            batch_size=config.batch_size,
-            shuffle=False,
-            num_workers=config.workers,
-            pin_memory=True)
     }
 
     return loaders
