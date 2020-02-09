@@ -24,7 +24,9 @@ we propose a method for data encryption, so that for human beings the encrypted 
 
 ### Requirements
 
-`robustness` is a package [MadryLab](http://madry-lab.ml/) created to make training, evaluating, and exploring neural networks flexible and easy.  We mainly use `robustness` in the next first step (1. train a base classifier) and second step (2. encrypt data) .
+??????
+
+`robustness` is a package [MadryLab](http://madry-lab.ml/) created to make training, evaluating, and exploring neural networks flexible and easy.  We mainly use `robustness` in the next first step (1. train a base classifier) and second step (2. encrypt data) . 
 
 
 
@@ -40,18 +42,26 @@ After training, the base classifier is saved at  ``./logs/checkpoints/dir/resnet
 
 ### 2. Encrypt data
 
-To encrypt the original CIFAR-10, run:
+To encrypt the original CIFAR-10, simply run:
 
 ```
-python encrypt.py --orig_data ./data/cifar10 --enc_data ./data --resume_path  
-./logs/checkpoints/dir/resnet50/checkpoint.pt.best --enc_method basic
+python encrypt.py --orig-data ./data/cifar10 --enc-data ./data --resume-path  
+./logs/checkpoints/dir/resnet50/checkpoint.pt.best --enc-method basic
 ```
 
-Use `--orig_data` to specify the directory where original CIFAR-10 is saved. Use `--enc_data` to specify the directory where encrypted CIFAR-10 will be saved.  Resume the base classifier from `--resume_path` and use option `--enc_method` to specify the encryption method. We provide four encrytion methods: `basic`, `mixup`, `horiz`, `mixandcat`.The other parameters of the encryption process are set to the values used in our paper by default. If you want to change them, you can check `encrypt.py` for more details.
+Use `--orig-data` to specify the directory where original CIFAR-10 is saved. Use `--enc-data` to specify the directory where encrypted CIFAR-10 will be saved.  Resume the base classifier from `--resume-path` and use option `--enc-method` to specify the encryption method. We provide four encrytion methods: `basic`, `mixup`, `horiz`, `mixandcat`. The other parameters of the encryption process are set to the values used in our paper by default. If you want to change them, you can check `encrypt.py` for more details.
 
 
 
 ### 3. Validate Encryption method
+
+To verify if our encryption method is useful
+
+```
+python train.py --orig-data ./data/cifar10 --enc-img ./data/train_image --enc-label ./data/train_label --work-path ./experiments/cifar10/preresnet110
+```
+
+?????
 
 
 
