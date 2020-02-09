@@ -30,15 +30,24 @@ we propose a method for data encryption, so that for human beings the encrypted 
 
 ### 1. Train a base classifier
 
-First download the CIFAR-10 and put it in an appropriate directory (e.g.  ``./data/cifar10``). Then train a standard (not robsut) ResNet-50 through the following command:
+First download CIFAR-10 and put it in an appropriate directory (e.g.  ``./data/cifar10``). Then train a standard (not robsut) ResNet-50 as base classifier through the following command:
 
 ```
 python -m robustness.main --dataset cifar --data ./data/cifar10 --adv-train 0 --arch resnet50 --out-dir ./logs/checkpoints/dir/ --exp-name resnet50
 ```
 
-
+After training, the base classifier is saved at  ``./logs/checkpoints/dir/resnet50/checkpoint.pt.best`` ,it will be used to encrypt the data.
 
 ### 2. Encrypt data
+
+To encrypt the original CIFAR-10, run:
+
+```
+python encrypt.py --orig_data ./data/cifar10 --enc_data ./data --resume_path  
+./logs/checkpoints/dir/resnet50/checkpoint.pt.best --enc_method basic
+```
+
+Use `--orig_data` to specify the directory where original CIFAR-10 is saved. Use `--enc_data` to specify the directory where encrypted CIFAR-10 will be saved.  Resume the base classifier from `--resume_path` and use option `--enc_method` to specify the encryption method. We provide four encrytion methods: `basic`, `mixup`, `horiz`, `mixandcat`.The other parameters of the encryption process are set to the values used in our paper by default. If you want to change them, you can check `encrypt.py` for more details.
 
 
 
