@@ -14,7 +14,7 @@ In the big data era, many organizations face the dilemma of data sharing. Regula
 However, unprotected data sharing may also lead to  data leakage. Inspired by adversarial attack, 
 we propose a method for data encryption, so that for human beings the encrypted data look identical to the original version,  but for machine learning methods they are misleading.
 
-<img src="C:\Users\10694\Desktop\paper\ICML relate\mainfig.png" alt="mainfig" style="zoom: 20%;" />
+<img src="https://github.com/Alxead/Adversarial-Data-Encryption/blob/master/images/mainfig.png" alt="mainfig" style="zoom: 20%;" />
 
 ## Getting Started
 
