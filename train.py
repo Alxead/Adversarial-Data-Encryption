@@ -19,9 +19,6 @@ from utils import Logger, count_parameters, data_augmentation, \
     save_checkpoint, adjust_learning_rate, get_current_lr
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR Dataset Training')
-parser.add_argument('--orig-data', default='./data/cifar10', help='path to the original dataset')
-parser.add_argument('--enc-img', default='./data/train_image', help='path to output encrypted dataset')
-parser.add_argument('--enc-label', default='./data/train_label', help='path to output encrypted dataset')
 parser.add_argument('--work-path', required=True, type=str)
 parser.add_argument('--resume', action='store_true', help='resume from checkpoint')
 
@@ -173,9 +170,6 @@ def main():
         config = yaml.load(f)
     # convert to dict
     config = EasyDict(config)
-    config['orig_data'] = args.orig_data
-    config['enc_img'] = args.enc_img
-    config['enc_label'] = args.enc_label
 
     logger.info(config)
 

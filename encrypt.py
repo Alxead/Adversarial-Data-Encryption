@@ -85,8 +85,8 @@ def generate_train_data(train_loader, model, kwargs, opt):
         time_ep = time.time() - time_ep
         print("Time:%.4f" % (time_ep))
 
-    ch.save(train_image, os.path.join(opt.enc_data, 'train_image'))
-    ch.save(train_label, os.path.join(opt.enc_data, 'train_label'))
+    ch.save(train_image, os.path.join(opt.enc_data, 'train_image_basic'))
+    ch.save(train_label, os.path.join(opt.enc_data, 'train_label_basic'))
     print("Save train set finished")
 
 
@@ -112,8 +112,8 @@ def generate_test_data(test_loader, model, kwargs, opt):
         time_ep = time.time() - time_ep
         print("Time:%.4f" % (time_ep))
 
-    ch.save(test_image, os.path.join(opt.enc_data, 'test_image'))
-    ch.save(test_label, os.path.join(opt.enc_data, 'test_label'))
+    ch.save(test_image, os.path.join(opt.enc_data, 'test_image_basic'))
+    ch.save(test_label, os.path.join(opt.enc_data, 'test_label_basic'))
     print("Save test set finished")
     print("Orig test set acc:%.4f" % (correct / 10000))
 

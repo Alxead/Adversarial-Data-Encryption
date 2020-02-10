@@ -149,21 +149,20 @@ class CustomTensorDataset(Dataset):
 def get_data_loader(transform_train, transform_test, config):
 
     orig_train_set = torchvision.datasets.CIFAR10(
-        root=config.orig_data, train=True,
+        root=config.orig_data_path, train=True,
         download=True, transform=transform_train)
 
     orig_test_set = torchvision.datasets.CIFAR10(
-        root=config.orig_data, train=False,
+        root=config.orig_data_path, train=False,
         download=True, transform=transform_test)
 
-    encrypt_train_data = torch.cat(torch.load(config.enc_img))
-    encrypt_train_labels = torch.cat(torch.load(config.enc_label))
+    encrypt_train_data = torch.cat(torch.load(config.encrypted_train_image))
+    encrypt_train_labels = torch.cat(torch.load(config.encrypted_train_label))
     encrypt_train_set = CustomTensorDataset(tensors=(encrypt_train_data, encrypt_train_labels),
                                             transform=transform_train)
 
-
-    encrypt_test_data = torch.cat(torch.load(os.path.join(config.data_path, "test_image")))
-    encrypt_test_labels = torch.cat(torch.load(os.path.join(config.data_path, "test_label")))
+    encrypt_test_data = torch.cat(torch.load(config.encrypted_test_image))
+    encrypt_test_labels = torch.cat(torch.load(config.encrypted_test_label))
     encrypt_test_set = CustomTensorDataset(tensors=(encrypt_test_data, encrypt_test_labels),
                                            transform=transform_test)
 

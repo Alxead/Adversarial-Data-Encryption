@@ -1,6 +1,6 @@
 # Adversarial-Data-Encryption
 
-PyTorch implementation of paper "Adversarial Attack for Data Encryption".
+PyTorch implementation of paper "Adversarial Attack for Data Encryption"
 
 Our implementation is based on these repositories:
 
@@ -8,34 +8,38 @@ Our implementation is based on these repositories:
 
 - [CIFAR-ZOO](https://github.com/BIGBALLON/CIFAR-ZOO)
 
+This implementation contains the main experiments on [CIFAR-10](http://www.cs.toronto.edu/~kriz/cifar.html?usg=alkjrhjqbhw2llxlo8emqns-tbk0at96jq) dataset.
+
 ### Abstract
 
 In the big data era, many organizations face the dilemma of data sharing. Regular data sharing is often necessary  for human-centered discussion and communication, especially in medical scenarios. 
 However, unprotected data sharing may also lead to  data leakage. Inspired by adversarial attack, 
-we propose a method for data encryption, so that for human beings the encrypted data look identical to the original version,  but for machine learning methods they are misleading.
+we propose a method for data encryption, so that for human beings the encrypted data look identical to the original version and the encrypted data can be used for discussion,  but for machine learning methods they are misleading and the encrypted data are useless for the malicious data stealers. 
 
 <img src="https://github.com/Alxead/Adversarial-Data-Encryption/blob/master/images/mainfig.png" width="600" alt="mainfig"/>
-
-
-
-
 
 ## Getting Started
 
 ### Requirements
 
-??????
+- Python (**>=3.6**)
+- PyTorch (**>=1.1.0**)
+- Tensorboard(**>=1.4.0**) (for ***visualization***)
+- Other dependencies (robustness, pyyaml, easydict)
+
+```
+pip install -r requirements.txt
+```
 
 `robustness` is a package [MadryLab](http://madry-lab.ml/) created to make training, evaluating, and exploring neural networks flexible and easy.  We mainly use `robustness` in the next first step (1. train a base classifier) and second step (2. encrypt data) . 
-
-
 
 ### 1. Train a base classifier
 
 First download CIFAR-10 and put it in an appropriate directory (e.g.  ``./data/cifar10``). Then train a standard (not robsut) ResNet-50 as base classifier through the following command:
 
 ```
-python -m robustness.main --dataset cifar --data ./data/cifar10 --adv-train 0 --arch resnet50 --out-dir ./logs/checkpoints/dir/ --exp-name resnet50
+python -m robustness.main --dataset cifar --data ./data/cifar10 --adv-train 0 \
+--arch resnet50 --out-dir ./logs/checkpoints/dir/ --exp-name resnet50
 ```
 
 After training, the base classifier is saved at  ``./logs/checkpoints/dir/resnet50/checkpoint.pt.best`` ,it will be used to encrypt the data.
@@ -45,27 +49,23 @@ After training, the base classifier is saved at  ``./logs/checkpoints/dir/resnet
 To encrypt the original CIFAR-10, simply run:
 
 ```
-python encrypt.py --orig-data ./data/cifar10 --enc-data ./data --resume-path  
-./logs/checkpoints/dir/resnet50/checkpoint.pt.best --enc-method basic
+python encrypt.py --orig-data ./data/cifar10 --enc-data ./data \
+--resume-path ./logs/checkpoints/dir/resnet50/checkpoint.pt.best --enc-method basic
 ```
 
-Use `--orig-data` to specify the directory where original CIFAR-10 is saved. Use `--enc-data` to specify the directory where encrypted CIFAR-10 will be saved.  Resume the base classifier from `--resume-path` and use option `--enc-method` to specify the encryption method. We provide four encrytion methods: `basic`, `mixup`, `horiz`, `mixandcat`. The other parameters of the encryption process are set to the values used in our paper by default. If you want to change them, you can check `encrypt.py` for more details.
-
-
+Use `--orig-data` to specify the directory where original CIFAR-10 is saved. Use `--enc-data` to specify the directory where encrypted CIFAR-10 will be saved.  Resume the base classifier from `--resume-path` and use option `--enc-method` to specify the encryption method. We provide four encrytion methods: `basic`, `mixup`, `horiz`, `mixandcat`. Encrypted data will be named with a suffix of encryption method. The other parameters of the encryption process are set to the values used in our paper by default. If you want to change them, you can check `encrypt.py` for more details.
 
 ### 3. Validate Encryption method
 
-To verify if our encryption method is useful
+To verify if the encryption method is useful, you sholud train a model using the encrypted data, and then observe its performance on the original test set and the encrypted test set. You can do this through the following command:
 
 ```
-python train.py --orig-data ./data/cifar10 --enc-img ./data/train_image --enc-label ./data/train_label --work-path ./experiments/cifar10/preresnet110
+python train.py --work-path ./experiments/cifar10/preresnet110
 ```
 
-?????
+This code train a PreResNet-110 using the encrypted data. Note that before training, first fill in the path of the encrypted data and original data in `config.yaml`. We use yaml file `config.yaml` to save all the parameters during training, check files in `./experimets` for more details.
 
-
-
-
+At the beginning of training, you will see that the accuracy of the encrypted test set is similar to that of the original test set, but as the training progresses, the accuracy on the original test set will become extremely low.
 
 ## Citation
 
