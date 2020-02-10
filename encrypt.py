@@ -351,30 +351,8 @@ def generate_test_data_mixandcat(test_loader, model, kwargs, opt):
 def map_label_target(label):
 
     batch_size = len(label)
-    targ_list = []
-
-    for i in range(batch_size):
-        if label[i] == 0:
-            targ_list.append(8)
-        elif label[i] == 1:
-            targ_list.append(3)
-        elif label[i] == 2:
-            targ_list.append(1)
-        elif label[i] == 3:
-            targ_list.append(0)
-        elif label[i] == 4:
-            targ_list.append(2)
-        elif label[i] == 5:
-            targ_list.append(4)
-        elif label[i] == 6:
-            targ_list.append(9)
-        elif label[i] == 7:
-            targ_list.append(6)
-        elif label[i] == 8:
-            targ_list.append(7)
-        elif label[i] == 9:
-            targ_list.append(5)
-
+    target_map = [8, 3, 1, 0, 2, 4, 9, 6, 7, 5]
+    targ_list = [target_map[label[i]] for i in range(batch_size)]
     targ = ch.tensor(targ_list)
 
     return targ
@@ -382,30 +360,8 @@ def map_label_target(label):
 
 def map_label_target2(label):
     batch_size = len(label)
-    targ_list = []
-
-    for i in range(batch_size):
-        if label[i] == 0:
-            targ_list.append(4)
-        elif label[i] == 1:
-            targ_list.append(2)
-        elif label[i] == 2:
-            targ_list.append(3)
-        elif label[i] == 3:
-            targ_list.append(5)
-        elif label[i] == 4:
-            targ_list.append(7)
-        elif label[i] == 5:
-            targ_list.append(1)
-        elif label[i] == 6:
-            targ_list.append(8)
-        elif label[i] == 7:
-            targ_list.append(0)
-        elif label[i] == 8:
-            targ_list.append(6)
-        elif label[i] == 9:
-            targ_list.append(9)
-
+    target_map = [4, 2, 3, 5, 7, 1, 8, 0, 6, 9]
+    targ_list = [target_map[label[i]] for i in range(batch_size)]
     targ = ch.tensor(targ_list)
 
     return targ
@@ -414,30 +370,8 @@ def map_label_target2(label):
 def map_label_target3(label):
 
     batch_size = len(label)
-    targ_list = []
-
-    for i in range(batch_size):
-        if label[i] == 0:
-            targ_list.append(6)
-        elif label[i] == 1:
-            targ_list.append(2)
-        elif label[i] == 2:
-            targ_list.append(9)
-        elif label[i] == 3:
-            targ_list.append(1)
-        elif label[i] == 4:
-            targ_list.append(0)
-        elif label[i] == 5:
-            targ_list.append(7)
-        elif label[i] == 6:
-            targ_list.append(5)
-        elif label[i] == 7:
-            targ_list.append(3)
-        elif label[i] == 8:
-            targ_list.append(4)
-        elif label[i] == 9:
-            targ_list.append(8)
-
+    target_map = [6, 2, 9, 1, 0, 7, 5, 3, 4, 8]
+    targ_list = [target_map[label[i]] for i in range(batch_size)]
     targ = ch.tensor(targ_list)
 
     return targ
@@ -446,30 +380,8 @@ def map_label_target3(label):
 def map_label_target4(label):
 
     batch_size = len(label)
-    targ_list = []
-
-    for i in range(batch_size):
-        if label[i] == 0:
-            targ_list.append(3)
-        elif label[i] == 1:
-            targ_list.append(9)
-        elif label[i] == 2:
-            targ_list.append(6)
-        elif label[i] == 3:
-            targ_list.append(1)
-        elif label[i] == 4:
-            targ_list.append(5)
-        elif label[i] == 5:
-            targ_list.append(8)
-        elif label[i] == 6:
-            targ_list.append(4)
-        elif label[i] == 7:
-            targ_list.append(7)
-        elif label[i] == 8:
-            targ_list.append(0)
-        elif label[i] == 9:
-            targ_list.append(2)
-
+    target_map = [3, 9, 6, 1, 5, 8, 4, 7, 0, 2]
+    targ_list = [target_map[label[i]] for i in range(batch_size)]
     targ = ch.tensor(targ_list)
 
     return targ
