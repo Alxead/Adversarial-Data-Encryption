@@ -69,7 +69,7 @@ At the beginning of training, you will see that the accuracy of the original tes
 
 ## Experimental Results
 
-Classification accuracy of different models on the CIFAR-10 encrypted test set and original test set.
+Classification accuracy of different models on the CIFAR-10 original test set and encrypted test set.
 
 - Basic encryption method
 
