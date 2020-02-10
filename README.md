@@ -1,6 +1,6 @@
 # Adversarial-Data-Encryption
 
-PyTorch implementation of paper "Adversarial Attack for Data Encryption"
+PyTorch implementation of paper "Adversarial Data Encryption"
 
 Our implementation is based on these repositories:
 
