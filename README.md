@@ -35,7 +35,7 @@ pip install -r requirements.txt
 
 ### 1. Train a base classifier
 
-First download CIFAR-10 and put it in an appropriate directory (e.g.  ``./data/cifar10``). Then train a standard (not robsut) ResNet-50 as base classifier through the following command:
+First download CIFAR-10 and put it in an appropriate directory (e.g.  ``./data/cifar10``). Then train a standard (not robust) ResNet-50 as base classifier through the following command:
 
 ```
 python -m robustness.main --dataset cifar --data ./data/cifar10 --adv-train 0 \
