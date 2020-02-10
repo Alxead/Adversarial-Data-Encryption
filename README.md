@@ -65,7 +65,35 @@ python train.py --work-path ./experiments/cifar10/preresnet110
 
 This code trains a PreResNet-110 using the encrypted data. Note that before training, first fill in the path of the encrypted data and original data in `config.yaml`. We use yaml file `config.yaml` to save all the parameters during training, check files in `./experimets` for more details.
 
-At the beginning of training, you will see that the accuracy of the encrypted test set is similar to that of the original test set, but as the training progresses, the accuracy on the original test set will become extremely low.
+At the beginning of training, you will see that the accuracy of the original test set is similar to that of the encrypted test set, but as the training progresses, the accuracy on the original test set will become extremely low.
+
+## Experimental Results
+
+Classification accuracy of different models on the CIFAR-10 encrypted test set and original test set.
+
+- Basic encryption method
+
+| model          | original test set acc | encrypted test set acc |
+| -------------- | --------------------- | ---------------------- |
+| DenseNet-100bc | 22.78%                | 94.70%                 |
+| PreResNet-110  | 20.67%                | 94.64%                 |
+| VGG-19         | 28.77%                | 93.58%                 |
+
+- Horizontal Concat method
+
+| model          | original test set acc | encrypted test set acc |
+| -------------- | --------------------- | ---------------------- |
+| DenseNet-100bc | 29.69%                | 94.62%                 |
+| PreResNet-110  | 32.65%                | 94.49%                 |
+| VGG-19         | 48.13%                | 94.30%                 |
+
+- Mixup And Concat method
+
+| model          | original test set acc | encrypted test set acc |
+| -------------- | --------------------- | ---------------------- |
+| DenseNet-100bc | 32.92%                | 94.45%                 |
+| PreResNet-110  | 37.21%                | 94.03%                 |
+| VGG-19         | 55.00%                | 93.06%                 |
 
 ## Citation
 
