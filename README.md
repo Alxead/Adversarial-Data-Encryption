@@ -53,11 +53,11 @@ python encrypt.py --orig-data ./data/cifar10 --enc-data ./data \
 --resume-path ./logs/checkpoints/dir/resnet50/checkpoint.pt.best --enc-method basic
 ```
 
-Use `--orig-data` to specify the directory where original CIFAR-10 is saved. Use `--enc-data` to specify the directory where encrypted CIFAR-10 will be saved.  Resume the base classifier from `--resume-path` and use option `--enc-method` to specify the encryption method. We provide four encrytion methods: `basic`, `mixup`, `horiz`, `mixandcat`. Encrypted data will be named with a suffix of encryption method. The other parameters of the encryption process are set to the values used in our paper by default. If you want to change them, you can check `encrypt.py` for more details.
+Use `--orig-data` to specify the directory where original CIFAR-10 is saved. Use `--enc-data` to specify the directory where encrypted CIFAR-10 will be saved.  Resume the base classifier from `--resume-path` and use option `--enc-method` to specify the encryption method. We provide four encryption methods: `basic`, `mixup`, `horiz`, `mixandcat`. Encrypted data will be named with a suffix of encryption method. The other parameters of the encryption process are set to the values used in our paper by default. If you want to change them, you can check `encrypt.py` for more details.
 
 ### 3. Validate Encryption method
 
-To verify if the encryption method is useful, you sholud train a model using the encrypted data, and then observe its performance on the original test set and the encrypted test set. You can do this through the following command:
+To verify if the encryption method is useful, you should train a model using the encrypted data, and then observe its performance on the original test set and the encrypted test set. You can do this through the following command:
 
 ```
 python train.py --work-path ./experiments/cifar10/preresnet110
