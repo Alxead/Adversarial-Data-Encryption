@@ -14,7 +14,7 @@ This implementation contains the main experiments on [CIFAR-10](http://www.cs.to
 
 In the big data era, many organizations face the dilemma of data sharing. Regular data sharing is often necessary  for human-centered discussion and communication, especially in medical scenarios. 
 However, unprotected data sharing may also lead to  data leakage. Inspired by adversarial attack, 
-we propose a method for data encryption, so that for human beings the encrypted data look identical to the original version and the encrypted data can be used for discussion,  but for machine learning methods they are misleading and the encrypted data are useless for the malicious data stealers. 
+we propose a method for data encryption, so that for human beings the encrypted data look identical to the original version. The encrypted data can be used for human discussion. However, for machine learning methods the encrypted data are misleading and useless.
 
 <img src="https://github.com/Alxead/Adversarial-Data-Encryption/blob/master/images/mainfig.png" width="600" alt="mainfig"/>
 
