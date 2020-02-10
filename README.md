@@ -63,7 +63,7 @@ To verify if the encryption method is useful, you should train a model using the
 python train.py --work-path ./experiments/cifar10/preresnet110
 ```
 
-This code train a PreResNet-110 using the encrypted data. Note that before training, first fill in the path of the encrypted data and original data in `config.yaml`. We use yaml file `config.yaml` to save all the parameters during training, check files in `./experimets` for more details.
+This code trains a PreResNet-110 using the encrypted data. Note that before training, first fill in the path of the encrypted data and original data in `config.yaml`. We use yaml file `config.yaml` to save all the parameters during training, check files in `./experimets` for more details.
 
 At the beginning of training, you will see that the accuracy of the encrypted test set is similar to that of the original test set, but as the training progresses, the accuracy on the original test set will become extremely low.
 
