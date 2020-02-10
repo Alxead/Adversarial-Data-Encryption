@@ -13,8 +13,7 @@ This implementation contains the main experiments on [CIFAR-10](http://www.cs.to
 ### Abstract
 
 In the big data era, many organizations face the dilemma of data sharing. Regular data sharing is often necessary  for human-centered discussion and communication, especially in medical scenarios. 
-However, unprotected data sharing may also lead to  data leakage. Inspired by adversarial attack, 
-we propose a method for data encryption, so that for human beings the encrypted data look identical to the original version. The encrypted data can be used for human discussion. However, for machine learning methods the encrypted data are misleading and useless.
+However, unprotected data sharing may also lead to  data leakage. Inspired by adversarial attack, we propose a method for data encryption. Encrypted images look identical to original ones for human beings, which means they can be used for discussion. However, for mechine learning algorithms, especially encoders, encrypted images are misleading, based on which malicious data stealers cannot obtain effective models for actual use. (Thus, our encryption algorithm is essential for safely data sharing.)
 
 <img src="https://github.com/Alxead/Adversarial-Data-Encryption/blob/master/images/mainfig.png" width="600" alt="mainfig"/>
 
@@ -96,4 +95,6 @@ Classification accuracy of different models on the CIFAR-10 original test set an
 | VGG-19         | 55.00%                | 93.06%                 |
 
 ## Citation
+
+* TODO: cite them -> [MadryLab](http://madry-lab.ml/)
 
