@@ -75,10 +75,11 @@ def generate_train_data(train_loader, model, kwargs, opt):
 
         time_ep = time.time()
         print("Process train batch %d" % (i))
-        targ = map_label_target(label)
+        im = im.cuda()
+        targ = map_label_target(label).cuda()
 
         model_prediction, im_adv = model(im, targ, make_adv=True, **kwargs)
-        print("Attack success rate: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1)).item() / len(im)))
 
         train_image.append(im_adv.cpu())
         train_label.append(label.cpu())
@@ -99,13 +100,15 @@ def generate_test_data(test_loader, model, kwargs, opt):
 
         time_ep = time.time()
         print("Process testset batch %d" % (i))
+        im = im.cuda()
         predict, _ = model(im)
         label_pred = ch.argmax(predict, dim=1)
         targ = map_label_target(label_pred)
         correct += ch.sum(label == label_pred.cpu()).item()
 
+        targ = targ.cuda()
         model_prediction, im_adv = model(im, targ, make_adv=True, **kwargs)
-        print("Attack success rate: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1)).item() / len(im)))
 
         test_image.append(im_adv.cpu())
         test_label.append(label.cpu())
@@ -125,14 +128,15 @@ def generate_train_data_horiz(train_loader, model, kwargs, opt):
 
         time_ep = time.time()
         print("process train batch %d" % (i))
-        targ = map_label_target(label)
-        targ2 = map_label_target2(label)
+        im = im.cuda()
+        targ = map_label_target(label).cuda()
+        targ2 = map_label_target2(label).cuda()
 
         model_prediction, im_adv = model(im, targ, make_adv=True, **kwargs)
-        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1)).item() / len(im)))
 
         model_prediction2, im_adv2 = model(im, targ2, make_adv=True, **kwargs)
-        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1)).item() / len(im)))
 
         # bs * 3 * height * width
         alpha = opt.alpha
@@ -159,17 +163,18 @@ def generate_test_data_horiz(test_loader, model, kwargs, opt):
     for i, (im, label) in enumerate(test_loader, 0):
         time_ep = time.time()
         print("Process testset batch %d" % (i))
+        im = im.cuda()
         predict, _ = model(im)
         label_pred = ch.argmax(predict, dim=1)
-        targ = map_label_target(label_pred)
-        targ2 = map_label_target2(label_pred)
+        targ = map_label_target(label_pred).cuda()
+        targ2 = map_label_target2(label_pred).cuda()
         correct += ch.sum(label == label_pred.cpu()).item()
 
         model_prediction, im_adv = model(im, targ, make_adv=True, **kwargs)
-        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1)).item() / len(im)))
 
         model_prediction2, im_adv2 = model(im, targ2, make_adv=True, **kwargs)
-        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1)).item() / len(im)))
 
         # bs * 3 * height * width
         alpha = opt.alpha
@@ -196,14 +201,15 @@ def generate_train_data_mixup(train_loader, model, kwargs, opt):
     for i, (im, label) in enumerate(train_loader, 0):
         time_ep = time.time()
         print("process train batch %d" % (i))
-        targ = map_label_target(label)
-        targ2 = map_label_target2(label)
+        im = im.cuda()
+        targ = map_label_target(label).cuda()
+        targ2 = map_label_target2(label).cuda()
 
         model_prediction, im_adv = model(im, targ, make_adv=True, **kwargs)
-        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1)).item() / len(im)))
 
         model_prediction2, im_adv2 = model(im, targ2, make_adv=True, **kwargs)
-        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1)).item() / len(im)))
 
         # mixup
         lambd = opt.lambd
@@ -227,17 +233,18 @@ def generate_test_data_mixup(test_loader, model, kwargs, opt):
     for i, (im, label) in enumerate(test_loader, 0):
         time_ep = time.time()
         print("Process testset batch %d" % (i))
+        im = im.cuda()
         predict, _ = model(im)
         label_pred = ch.argmax(predict, dim=1)
-        targ = map_label_target(label_pred)
-        targ2 = map_label_target2(label_pred)
+        targ = map_label_target(label_pred).cuda()
+        targ2 = map_label_target2(label_pred).cuda()
         correct += ch.sum(label == label_pred.cpu()).item()
 
         model_prediction, im_adv = model(im, targ, make_adv=True, **kwargs)
-        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1)).item() / len(im)))
 
         model_prediction2, im_adv2 = model(im, targ2, make_adv=True, **kwargs)
-        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1)).item() / len(im)))
 
         # mixup
         lambd = opt.lambd
@@ -260,22 +267,23 @@ def generate_train_data_mixandcat(train_loader, model, kwargs, opt):
     for i, (im, label) in enumerate(train_loader, 0):
         time_ep = time.time()
         print("process train batch %d" % (i))
-        targ = map_label_target(label)
-        targ2 = map_label_target2(label)
-        targ3 = map_label_target3(label)
-        targ4 = map_label_target4(label)
+        targ = map_label_target(label).cuda()
+        targ2 = map_label_target2(label).cuda()
+        targ3 = map_label_target3(label).cuda()
+        targ4 = map_label_target4(label).cuda()
+        im = im.cuda()
 
         model_prediction, im_adv = model(im, targ, make_adv=True, **kwargs)
-        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1)).item() / len(im)))
 
         model_prediction2, im_adv2 = model(im, targ2, make_adv=True, **kwargs)
-        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1)).item() / len(im)))
 
         model_prediction3, im_adv3 = model(im, targ3, make_adv=True, **kwargs)
-        print("Attack success rate3: %.4f" % (ch.sum(targ3 == ch.argmax(model_prediction3, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate3: %.4f" % (ch.sum(targ3 == ch.argmax(model_prediction3, dim=1)).item() / len(im)))
 
         model_prediction4, im_adv4 = model(im, targ4, make_adv=True, **kwargs)
-        print("Attack success rate4: %.4f" % (ch.sum(targ4 == ch.argmax(model_prediction4, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate4: %.4f" % (ch.sum(targ4 == ch.argmax(model_prediction4, dim=1)).item() / len(im)))
 
         # mixup and horizontal concat
         # bs * 3 * height * width
@@ -306,25 +314,26 @@ def generate_test_data_mixandcat(test_loader, model, kwargs, opt):
     for i, (im, label) in enumerate(test_loader, 0):
         time_ep = time.time()
         print("process testset batch %d" % (i))
+        im = im.cuda()
         predict, _ = model(im)
         label_pred = ch.argmax(predict, dim=1)
-        targ = map_label_target(label_pred)
-        targ2 = map_label_target2(label_pred)
-        targ3 = map_label_target3(label_pred)
-        targ4 = map_label_target4(label_pred)
+        targ = map_label_target(label_pred).cuda()
+        targ2 = map_label_target2(label_pred).cuda()
+        targ3 = map_label_target3(label_pred).cuda()
+        targ4 = map_label_target4(label_pred).cuda()
         correct += ch.sum(label == label_pred.cpu()).item()
 
         model_prediction, im_adv = model(im, targ, make_adv=True, **kwargs)
-        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate1: %.4f" % (ch.sum(targ == ch.argmax(model_prediction, dim=1)).item() / len(im)))
 
         model_prediction2, im_adv2 = model(im, targ2, make_adv=True, **kwargs)
-        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate2: %.4f" % (ch.sum(targ2 == ch.argmax(model_prediction2, dim=1)).item() / len(im)))
 
         model_prediction3, im_adv3 = model(im, targ3, make_adv=True, **kwargs)
-        print("Attack success rate3: %.4f" % (ch.sum(targ3 == ch.argmax(model_prediction3, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate3: %.4f" % (ch.sum(targ3 == ch.argmax(model_prediction3, dim=1)).item() / len(im)))
 
         model_prediction4, im_adv4 = model(im, targ4, make_adv=True, **kwargs)
-        print("Attack success rate4: %.4f" % (ch.sum(targ4 == ch.argmax(model_prediction4, dim=1).cpu()).item() / len(im)))
+        print("Attack success rate4: %.4f" % (ch.sum(targ4 == ch.argmax(model_prediction4, dim=1)).item() / len(im)))
 
         # mixup and horizontal concat
         # bs * 3 * height * width
